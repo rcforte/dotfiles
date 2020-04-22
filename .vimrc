@@ -13,7 +13,7 @@ set nowrap
 set smartcase
 set noswapfile
 set nobackup
-set undodir=~/.vim/undodir
+set undodir=$HOME/.vim/undodir
 set undofile
 set incsearch
 set cursorline
@@ -26,14 +26,14 @@ highlight ColorColumn ctermbg=0 guibg=lightgrey
 set encoding=UTF-8
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=$HOME/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-repeat'
 Plugin 'scrooloose/nerdtree'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'bling/vim-airline'
 Plugin 'easymotion/vim-easymotion'
@@ -50,7 +50,6 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'matze/vim-move'
 Plugin 'mileszs/ack.vim'
 Plugin 'mru.vim'
-"Plugin 'valloric/youcompleteme'
 Plugin 'ycm-core/youcompleteme'
 call vundle#end()
 
@@ -105,9 +104,21 @@ let g:NERDTreeDirArrowCollapsible = '▾'
 noremap <leader>f :MRU<CR>
 
 " Cntrl-p
-let g:ctrlp_map = '<C-f>'
 noremap <leader>j :CtrlP<cr>
 noremap <C-b> :CtrlPBuffer<cr>
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+let g:ctrlp_map = '<C-f>'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+let g:ctrlp_switch_buffer = 'et'
+let g:ctrlp_root_markers = ['pom.xml', '.p4ignore']
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
 
 " Surround
 vnoremap Si S(i_<esc>f)
@@ -119,8 +130,23 @@ augroup END
 " Vim Move Plugin
 let g:move_key_modifier = 'C'
 
+" YouCompleteMe
+nnoremap <silent> <leader>def :YcmCompleter GoToDefinition<CR>
+nnoremap <silent> <leader>dec :YcmCompleter GoToDeclaration<CR>
+nnoremap <silent> <leader>fix :YcmCompleter FixIt<CR>
+
 " Moving between windows (I don't mind doing C-W)
 "map <C-j> <C-W>j
 "map <C-k> <C-W>k
 "map <C-h> <C-W>h
 "map <C-l> <C-W>l
+
+" GUI specific configs
+if has("gui_running")
+  "set guifont=Cascadia\ Code\ PL:h12
+  set guifont=CaskaydiaCove\ Nerd\ Font\ Mono:h12
+  set guioptions-=T
+  set guioptions-=m
+  set guioptions-=r
+  set guioptions-=L
+endif
