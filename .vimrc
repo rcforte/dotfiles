@@ -51,6 +51,7 @@ Plugin 'matze/vim-move'
 Plugin 'mileszs/ack.vim'
 Plugin 'mru.vim'
 Plugin 'ycm-core/youcompleteme'
+Plugin 'jlanzarotta/bufexplorer'
 call vundle#end()
 
 filetype plugin indent on
@@ -129,6 +130,14 @@ augroup END
 
 " Vim Move Plugin
 let g:move_key_modifier = 'C'
+
+" BufExplorer
+nnoremap <silent> <leader>o :BufExplorer<CR>
+
+" Synchromnize nerdtree and buffer
+au VimEnter * NERDTree
+au BufEnter * lcd %:p:h
+au BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " YouCompleteMe
 nnoremap <silent> <leader>def :YcmCompleter GoToDefinition<CR>
