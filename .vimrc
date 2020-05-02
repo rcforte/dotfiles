@@ -57,7 +57,9 @@ call vundle#end()
 filetype plugin indent on
 
 " Color
-colorscheme dracula
+"colorscheme dracula
+set background=dark
+colorscheme gruvbox
 
 " Rainbow
 augroup rainbow
@@ -135,7 +137,7 @@ let g:move_key_modifier = 'C'
 nnoremap <silent> <leader>o :BufExplorer<CR>
 
 " Synchromnize nerdtree and buffer
-au VimEnter * NERDTree
+"au VimEnter * NERDTree
 au BufEnter * lcd %:p:h
 au BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
@@ -143,6 +145,9 @@ au BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTre
 nnoremap <silent> <leader>def :YcmCompleter GoToDefinition<CR>
 nnoremap <silent> <leader>dec :YcmCompleter GoToDeclaration<CR>
 nnoremap <silent> <leader>fix :YcmCompleter FixIt<CR>
+let g:ycm_add_preview_to_completeopt = 0
+"let g:ycm_autoclose_preview_window_after_completion = 0
+set completeopt-=preview
 
 " Moving between windows (I don't mind doing C-W)
 "map <C-j> <C-W>j
