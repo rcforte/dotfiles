@@ -158,7 +158,11 @@ set completeopt-=preview
 " GUI specific configs
 if has("gui_running")
   "set guifont=Cascadia\ Code\ PL:h12
-  set guifont=CaskaydiaCove\ Nerd\ Font\ Mono:h12
+  "set guifont=CaskaydiaCove\ Nerd\ Font\ Mono:h12
+  "set guifont=agave_Nerd_Font_Mono:h12
+  "set guifont=JetBrainsMono_Nerd_Font_Mono:h12
+  "set guifont=CaskaydiaCove\ Nerd\ Font\ Mono:h12
+  set guifont=FantasqueSansMono_Nerd_Font:h12:b
   set guioptions-=T
   set guioptions-=m
   set guioptions-=r
