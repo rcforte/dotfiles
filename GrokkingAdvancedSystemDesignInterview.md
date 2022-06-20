@@ -36,7 +36,7 @@
   bucket is added, it will automatically start getting keys and decreasing 
   the load on the next special bucket.
 
-  ***START REVIEW***
+***START REVIEW***
 
   The hash functions for special buckets may not distribute them evenly
   across the buckets. This means some special buckets may end up receiving
@@ -44,8 +44,9 @@
   virtual special buckets. You can do this reusing the same special buckets,
   and applying other hash functions on them so that the same special bucket can 
   be assigned to different slots in your ring.
+ all
 
-  *** END REVIEW ***
+***END REVIEW***
 
 - Dynamo uses consistent-hashing. In order to avoid hotspots recalculating
   tokens (key ranges), Dynamo uses a scheme known as v-nodes, where each 
@@ -56,21 +57,23 @@
 ## Replication
 
 - Dynamo replicates data asynchronously on the background, and only for a few 
-  nodes (the replication factor) in the instance. Each key is assigned a 
-  coordinator node, which is the first node of the range. It is important to 
+  nodes (as defined by the replication factor) in the cluster. Each key is assigned a 
+  **coordinator node**, which is the first hash range. It is important to 
   note that some nodes may be down when the write is happening, which means 
   some instances may have a different version of the values, which is a 
-  consistency problem. This will be solved with ***vector clocks***. If the 
+  consistency problem. This will be solved with **vector clocks**. If the 
   replication factor is N, then Dynamo will store N versions of the data in the 
   cluster.
 
 - Preference list is the list of nodes that will maintain the replica of the 
-  key-value written. It will be the first node in the range, followed by the 
-  next N-1 nodes clockwise.
+  key-value written. It will have more than N nodes. It will be the firsts N-1
+  clockwise nodes after the coordinator node in the hash range. Some of these
+  nodes might be down, which means it won't **necessarily** be the N-1 nodes in
+  next to the coordinator in the ring.
 
 - *Sloppy quorum and handling of temporary failures:* A read/write is not 
-  successful if it is not completed in all healthy nodes of the preference 
-  list.
+  successful if it is not completed in at least N-1 healthy nodes of the 
+  preference list.
 
 - *Hinted-handoff:* When Dynamo reads/writes, it needs a sloppy quorum. If
   some of the nodes of the quorum are down, Dynamo will find the next node
@@ -137,14 +140,14 @@
 ## Anti-entropy Through Merkle Trees
 
 - What are merkle trees? Binary search tree where the values are the hashes
-   of children nodes.
+  of children nodes.
 
 - How is it used? MTs are created for different key ranges in the replica
-   nodes. The roots of the MTs are then compared. If the values do not match
-   there is a conflict, then the algo does a DFS to find exacly what data
-   parts are causing the conflict. Once they are identified (efficiently)
-   the conflict that can resolved. So the tree is used to spot data out of
-   sync.
+  nodes. The roots of the MTs are then compared. If the values do not match
+  there is a conflict, then the algo does a DFS to find exacly what data
+  parts are causing the conflict. Once they are identified (efficiently)
+  the conflict that can resolved. So the tree is used to spot data out of
+  sync.
 
 ## Gossip Protocol
 
